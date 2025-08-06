@@ -23,7 +23,7 @@ template <uint8_t _muxCount, uint8_t _muxChannels, uint8_t _muxPins>
 class Rox74HC40XX {
   public:
     Rox74HC40XX(){}
-    void begin(uint8_t ch1, uint8_t ch2, uint8_t ch3, int8_t ch4=-1){
+    void begin(uint8_t ch1, uint8_t ch2, uint8_t ch3, int8_t ch4=-1, uint8_t earlyCutoff=0){
       if(_muxChannels<3 || _muxChannels>4){
         delay(1000);
         Serial.println("channel must be 3 or 4");
@@ -47,6 +47,7 @@ class Rox74HC40XX {
       for(uint8_t i = 0 ; i < _muxChannels ; i++){
         pinMode(channels[i], OUTPUT);
       }
+      earlyCutoff = earlyCutoff;
       delay(10);
       timeout = millis();
     }
@@ -90,7 +91,7 @@ private:
     uint16_t values[_muxCount*_muxPins];
     unsigned long timeout;
     const uint16_t totalPins = (_muxCount*_muxPins);
-
+    uint8_t earlyCutoff = 0;
     void readMux(){
       for(uint8_t i = 0 ; i < _muxCount ; i++){
         uint8_t index = (i*_muxPins) + currentChannel;
@@ -100,7 +101,7 @@ private:
       }
       // go to the next channel
       currentChannel++;
-      if(currentChannel >= _muxPins){
+      if(currentChannel >= _muxPins || (earlyCutoff > 0 && currentChannel >= earlyCutoff)){
         currentChannel = 0;
       }
       // set the channel pins
