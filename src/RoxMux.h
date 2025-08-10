@@ -10,7 +10,7 @@
 #define ROX_VERSION_MAJ     1
 #define ROX_VERSION_MIN     7
 #define ROX_VERSION_PATCH   3
-#define ROX_VERSION_STR     "1.7.3"
+#define ROX_VERSION_STR     "1.7.4"
 
 //RoxLatchingRelay and RoxNonLatchingRelay
 #define ROX_RESET 0
